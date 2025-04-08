@@ -1,0 +1,11 @@
+framework module WhaleCloud {
+  umbrella header "WhaleCloud.h"
+  export *
+
+  module * { export * }
+}
+
+module WhaleCloud.Swift {
+  header "WhaleCloud-Swift.h"
+  requires objc
+}

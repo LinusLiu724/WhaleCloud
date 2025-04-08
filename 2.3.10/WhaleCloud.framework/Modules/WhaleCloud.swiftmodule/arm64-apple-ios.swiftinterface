@@ -1,0 +1,1753 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -enable-experimental-feature OpaqueTypeErasure -enable-bare-slash-regex -module-name WhaleCloud
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+import AVFoundation
+import CommonCrypto
+import CoreFoundation
+import CoreServices
+import Dispatch
+import Foundation
+import MobileCoreServices
+import Security
+import Swift
+import SystemConfiguration
+import UIKit
+import WebRTC
+@_exported import WhaleCloud
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import zlib
+public enum HTTPMethod : Swift.String {
+  case options
+  case get
+  case head
+  case post
+  case put
+  case patch
+  case delete
+  case trace
+  case connect
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public typealias Parameters = [Swift.String : Any]
+public protocol ParameterEncoding {
+  func encode(_ urlRequest: any WhaleCloud.URLRequestConvertible, with parameters: WhaleCloud.Parameters?) throws -> Foundation.URLRequest
+}
+public struct URLEncoding : WhaleCloud.ParameterEncoding {
+  public enum Destination {
+    case methodDependent, queryString, httpBody
+    public static func == (a: WhaleCloud.URLEncoding.Destination, b: WhaleCloud.URLEncoding.Destination) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum ArrayEncoding {
+    case brackets, noBrackets
+    public static func == (a: WhaleCloud.URLEncoding.ArrayEncoding, b: WhaleCloud.URLEncoding.ArrayEncoding) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum BoolEncoding {
+    case numeric, literal
+    public static func == (a: WhaleCloud.URLEncoding.BoolEncoding, b: WhaleCloud.URLEncoding.BoolEncoding) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public static var `default`: WhaleCloud.URLEncoding {
+    get
+  }
+  public static var methodDependent: WhaleCloud.URLEncoding {
+    get
+  }
+  public static var queryString: WhaleCloud.URLEncoding {
+    get
+  }
+  public static var httpBody: WhaleCloud.URLEncoding {
+    get
+  }
+  public let destination: WhaleCloud.URLEncoding.Destination
+  public let arrayEncoding: WhaleCloud.URLEncoding.ArrayEncoding
+  public let boolEncoding: WhaleCloud.URLEncoding.BoolEncoding
+  public init(destination: WhaleCloud.URLEncoding.Destination = .methodDependent, arrayEncoding: WhaleCloud.URLEncoding.ArrayEncoding = .brackets, boolEncoding: WhaleCloud.URLEncoding.BoolEncoding = .numeric)
+  public func encode(_ urlRequest: any WhaleCloud.URLRequestConvertible, with parameters: WhaleCloud.Parameters?) throws -> Foundation.URLRequest
+  public func queryComponents(fromKey key: Swift.String, value: Any) -> [(Swift.String, Swift.String)]
+  public func escape(_ string: Swift.String) -> Swift.String
+}
+public struct JSONEncoding : WhaleCloud.ParameterEncoding {
+  public static var `default`: WhaleCloud.JSONEncoding {
+    get
+  }
+  public static var prettyPrinted: WhaleCloud.JSONEncoding {
+    get
+  }
+  public let options: Foundation.JSONSerialization.WritingOptions
+  public init(options: Foundation.JSONSerialization.WritingOptions = [])
+  public func encode(_ urlRequest: any WhaleCloud.URLRequestConvertible, with parameters: WhaleCloud.Parameters?) throws -> Foundation.URLRequest
+  public func encode(_ urlRequest: any WhaleCloud.URLRequestConvertible, withJSONObject jsonObject: Any? = nil) throws -> Foundation.URLRequest
+}
+public struct PropertyListEncoding : WhaleCloud.ParameterEncoding {
+  public static var `default`: WhaleCloud.PropertyListEncoding {
+    get
+  }
+  public static var xml: WhaleCloud.PropertyListEncoding {
+    get
+  }
+  public static var binary: WhaleCloud.PropertyListEncoding {
+    get
+  }
+  public let format: Foundation.PropertyListSerialization.PropertyListFormat
+  public let options: Foundation.PropertyListSerialization.WriteOptions
+  public init(format: Foundation.PropertyListSerialization.PropertyListFormat = .xml, options: Foundation.PropertyListSerialization.WriteOptions = 0)
+  public func encode(_ urlRequest: any WhaleCloud.URLRequestConvertible, with parameters: WhaleCloud.Parameters?) throws -> Foundation.URLRequest
+}
+extension Foundation.NSNotification.Name {
+  public struct Task {
+    public static let DidResume: Foundation.Notification.Name
+    public static let DidSuspend: Foundation.Notification.Name
+    public static let DidCancel: Foundation.Notification.Name
+    public static let DidComplete: Foundation.Notification.Name
+  }
+}
+extension Foundation.Notification {
+  public struct Key {
+    public static let Task: Swift.String
+    public static let ResponseData: Swift.String
+  }
+}
+@objc public enum TextEncodeType : Swift.UInt8 {
+  case UTF8 = 1
+  case GBK = 2
+  public init?(rawValue: Swift.UInt8)
+  public typealias RawValue = Swift.UInt8
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+public struct SSLClientCertificateError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String?
+}
+public class SSLClientCertificate {
+  convenience public init(pkcs12Path: Swift.String, password: Swift.String) throws
+  public init(identity: Security.SecIdentity, identityCertificate: Security.SecCertificate)
+  convenience public init(pkcs12Url: Foundation.URL, password: Swift.String) throws
+  public init(pkcs12Url: Foundation.URL, importOptions: CoreFoundation.CFDictionary) throws
+  @objc deinit
+}
+public protocol URLConvertible {
+  func asURL() throws -> Foundation.URL
+}
+extension Swift.String : WhaleCloud.URLConvertible {
+  public func asURL() throws -> Foundation.URL
+}
+extension Foundation.URL : WhaleCloud.URLConvertible {
+  public func asURL() throws -> Foundation.URL
+}
+extension Foundation.URLComponents : WhaleCloud.URLConvertible {
+  public func asURL() throws -> Foundation.URL
+}
+public protocol URLRequestConvertible {
+  func asURLRequest() throws -> Foundation.URLRequest
+}
+extension WhaleCloud.URLRequestConvertible {
+  public var urlRequest: Foundation.URLRequest? {
+    get
+  }
+}
+extension Foundation.URLRequest : WhaleCloud.URLRequestConvertible {
+  public func asURLRequest() throws -> Foundation.URLRequest
+}
+extension Foundation.URLRequest {
+  public init(url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod, headers: WhaleCloud.HTTPHeaders? = nil) throws
+}
+@discardableResult
+public func request(_ url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .get, parameters: WhaleCloud.Parameters? = nil, encoding: any WhaleCloud.ParameterEncoding = URLEncoding.default, headers: WhaleCloud.HTTPHeaders? = nil) -> WhaleCloud.DataRequest
+@discardableResult
+public func request(_ urlRequest: any WhaleCloud.URLRequestConvertible) -> WhaleCloud.DataRequest
+@discardableResult
+public func download(_ url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .get, parameters: WhaleCloud.Parameters? = nil, encoding: any WhaleCloud.ParameterEncoding = URLEncoding.default, headers: WhaleCloud.HTTPHeaders? = nil, to destination: WhaleCloud.DownloadRequest.DownloadFileDestination? = nil) -> WhaleCloud.DownloadRequest
+@discardableResult
+public func download(_ urlRequest: any WhaleCloud.URLRequestConvertible, to destination: WhaleCloud.DownloadRequest.DownloadFileDestination? = nil) -> WhaleCloud.DownloadRequest
+@discardableResult
+public func download(resumingWith resumeData: Foundation.Data, to destination: WhaleCloud.DownloadRequest.DownloadFileDestination? = nil) -> WhaleCloud.DownloadRequest
+@discardableResult
+public func upload(_ fileURL: Foundation.URL, to url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .post, headers: WhaleCloud.HTTPHeaders? = nil) -> WhaleCloud.UploadRequest
+@discardableResult
+public func upload(_ fileURL: Foundation.URL, with urlRequest: any WhaleCloud.URLRequestConvertible) -> WhaleCloud.UploadRequest
+@discardableResult
+public func upload(_ data: Foundation.Data, to url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .post, headers: WhaleCloud.HTTPHeaders? = nil) -> WhaleCloud.UploadRequest
+@discardableResult
+public func upload(_ data: Foundation.Data, with urlRequest: any WhaleCloud.URLRequestConvertible) -> WhaleCloud.UploadRequest
+@discardableResult
+public func upload(_ stream: Foundation.InputStream, to url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .post, headers: WhaleCloud.HTTPHeaders? = nil) -> WhaleCloud.UploadRequest
+@discardableResult
+public func upload(_ stream: Foundation.InputStream, with urlRequest: any WhaleCloud.URLRequestConvertible) -> WhaleCloud.UploadRequest
+public func upload(multipartFormData: @escaping (WhaleCloud.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold, to url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .post, headers: WhaleCloud.HTTPHeaders? = nil, encodingCompletion: ((WhaleCloud.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+public func upload(multipartFormData: @escaping (WhaleCloud.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold, with urlRequest: any WhaleCloud.URLRequestConvertible, encodingCompletion: ((WhaleCloud.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+@discardableResult
+public func stream(withHostName hostName: Swift.String, port: Swift.Int) -> WhaleCloud.StreamRequest
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+@discardableResult
+public func stream(with netService: Foundation.NetService) -> WhaleCloud.StreamRequest
+public enum SwiftyJSONError : Swift.Int, Swift.Error {
+  case unsupportedType
+  case indexOutOfBounds
+  case elementTooDeep
+  case wrongType
+  case notExist
+  case invalidJSON
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension WhaleCloud.SwiftyJSONError : Foundation.CustomNSError {
+  public static var errorDomain: Swift.String {
+    get
+  }
+  public var errorCode: Swift.Int {
+    get
+  }
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+public enum Type : Swift.Int {
+  case number
+  case string
+  case bool
+  case array
+  case dictionary
+  case null
+  case unknown
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct JSON {
+  public init(data: Foundation.Data, options opt: Foundation.JSONSerialization.ReadingOptions = []) throws
+  public init(_ object: Any)
+  public init(parseJSON jsonString: Swift.String)
+  public mutating func merge(with other: WhaleCloud.JSON) throws
+  public func merged(with other: WhaleCloud.JSON) throws -> WhaleCloud.JSON
+  public var type: WhaleCloud.`Type` {
+    get
+  }
+  public var error: WhaleCloud.SwiftyJSONError? {
+    get
+  }
+  public var object: Any {
+    get
+    set
+  }
+  @available(*, unavailable, renamed: "null")
+  public static var nullJSON: WhaleCloud.JSON {
+    get
+  }
+  public static var null: WhaleCloud.JSON {
+    get
+  }
+}
+public enum Index<T> : Swift.Comparable {
+  case array(Swift.Int)
+  case dictionary(Swift.DictionaryIndex<Swift.String, T>)
+  case null
+  public static func == (lhs: WhaleCloud.Index<T>, rhs: WhaleCloud.Index<T>) -> Swift.Bool
+  public static func < (lhs: WhaleCloud.Index<T>, rhs: WhaleCloud.Index<T>) -> Swift.Bool
+}
+public typealias JSONIndex = WhaleCloud.Index<WhaleCloud.JSON>
+public typealias JSONRawIndex = WhaleCloud.Index<Any>
+extension WhaleCloud.JSON : Swift.Collection {
+  public typealias Index = WhaleCloud.JSONRawIndex
+  public var startIndex: WhaleCloud.JSON.Index {
+    get
+  }
+  public var endIndex: WhaleCloud.JSON.Index {
+    get
+  }
+  public func index(after i: WhaleCloud.JSON.Index) -> WhaleCloud.JSON.Index
+  public subscript(position: WhaleCloud.JSON.Index) -> (Swift.String, WhaleCloud.JSON) {
+    get
+  }
+  public typealias Element = (Swift.String, WhaleCloud.JSON)
+  public typealias Indices = Swift.DefaultIndices<WhaleCloud.JSON>
+  public typealias Iterator = Swift.IndexingIterator<WhaleCloud.JSON>
+  public typealias SubSequence = Swift.Slice<WhaleCloud.JSON>
+}
+public enum JSONKey {
+  case index(Swift.Int)
+  case key(Swift.String)
+}
+public protocol JSONSubscriptType {
+  var jsonKey: WhaleCloud.JSONKey { get }
+}
+extension Swift.Int : WhaleCloud.JSONSubscriptType {
+  public var jsonKey: WhaleCloud.JSONKey {
+    get
+  }
+}
+extension Swift.String : WhaleCloud.JSONSubscriptType {
+  public var jsonKey: WhaleCloud.JSONKey {
+    get
+  }
+}
+extension WhaleCloud.JSON {
+  public subscript(path: [any WhaleCloud.JSONSubscriptType]) -> WhaleCloud.JSON {
+    get
+    set
+  }
+  public subscript(path: any WhaleCloud.JSONSubscriptType...) -> WhaleCloud.JSON {
+    get
+    set
+  }
+}
+extension WhaleCloud.JSON : Swift.ExpressibleByStringLiteral {
+  public init(stringLiteral value: Swift.StringLiteralType)
+  public init(extendedGraphemeClusterLiteral value: Swift.StringLiteralType)
+  public init(unicodeScalarLiteral value: Swift.StringLiteralType)
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.StringLiteralType
+  public typealias StringLiteralType = Swift.StringLiteralType
+  public typealias UnicodeScalarLiteralType = Swift.StringLiteralType
+}
+extension WhaleCloud.JSON : Swift.ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: Swift.IntegerLiteralType)
+  public typealias IntegerLiteralType = Swift.IntegerLiteralType
+}
+extension WhaleCloud.JSON : Swift.ExpressibleByBooleanLiteral {
+  public init(booleanLiteral value: Swift.BooleanLiteralType)
+  public typealias BooleanLiteralType = Swift.BooleanLiteralType
+}
+extension WhaleCloud.JSON : Swift.ExpressibleByFloatLiteral {
+  public init(floatLiteral value: Swift.FloatLiteralType)
+  public typealias FloatLiteralType = Swift.FloatLiteralType
+}
+extension WhaleCloud.JSON : Swift.ExpressibleByDictionaryLiteral {
+  public init(dictionaryLiteral elements: (Swift.String, Any)...)
+  public typealias Key = Swift.String
+  public typealias Value = Any
+}
+extension WhaleCloud.JSON : Swift.ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Any...)
+  public typealias ArrayLiteralElement = Any
+}
+extension WhaleCloud.JSON : Swift.RawRepresentable {
+  public init?(rawValue: Any)
+  public var rawValue: Any {
+    get
+  }
+  public func rawData(options opt: Foundation.JSONSerialization.WritingOptions = JSONSerialization.WritingOptions(rawValue: 0)) throws -> Foundation.Data
+  public func rawString(_ encoding: Swift.String.Encoding = .utf8, options opt: Foundation.JSONSerialization.WritingOptions = .prettyPrinted) -> Swift.String?
+  public func rawString(_ options: [WhaleCloud.writingOptionsKeys : Any]) -> Swift.String?
+  public typealias RawValue = Any
+}
+extension WhaleCloud.JSON : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension WhaleCloud.JSON {
+  public var array: [WhaleCloud.JSON]? {
+    get
+  }
+  public var arrayValue: [WhaleCloud.JSON] {
+    get
+  }
+  public var arrayObject: [Any]? {
+    get
+    set
+  }
+}
+extension WhaleCloud.JSON {
+  public var dictionary: [Swift.String : WhaleCloud.JSON]? {
+    get
+  }
+  public var dictionaryValue: [Swift.String : WhaleCloud.JSON] {
+    get
+  }
+  public var dictionaryObject: [Swift.String : Any]? {
+    get
+    set
+  }
+}
+extension WhaleCloud.JSON {
+  public var bool: Swift.Bool? {
+    get
+    set
+  }
+  public var boolValue: Swift.Bool {
+    get
+    set
+  }
+}
+extension WhaleCloud.JSON {
+  public var string: Swift.String? {
+    get
+    set
+  }
+  public var stringValue: Swift.String {
+    get
+    set
+  }
+}
+extension WhaleCloud.JSON {
+  public var number: Foundation.NSNumber? {
+    get
+    set
+  }
+  public var numberValue: Foundation.NSNumber {
+    get
+    set
+  }
+}
+extension WhaleCloud.JSON {
+  public var null: Foundation.NSNull? {
+    get
+    set
+  }
+  public func exists() -> Swift.Bool
+}
+extension WhaleCloud.JSON {
+  public var url: Foundation.URL? {
+    get
+    set
+  }
+}
+extension WhaleCloud.JSON {
+  public var double: Swift.Double? {
+    get
+    set
+  }
+  public var doubleValue: Swift.Double {
+    get
+    set
+  }
+  public var float: Swift.Float? {
+    get
+    set
+  }
+  public var floatValue: Swift.Float {
+    get
+    set
+  }
+  public var int: Swift.Int? {
+    get
+    set
+  }
+  public var intValue: Swift.Int {
+    get
+    set
+  }
+  public var uInt: Swift.UInt? {
+    get
+    set
+  }
+  public var uIntValue: Swift.UInt {
+    get
+    set
+  }
+  public var int8: Swift.Int8? {
+    get
+    set
+  }
+  public var int8Value: Swift.Int8 {
+    get
+    set
+  }
+  public var uInt8: Swift.UInt8? {
+    get
+    set
+  }
+  public var uInt8Value: Swift.UInt8 {
+    get
+    set
+  }
+  public var int16: Swift.Int16? {
+    get
+    set
+  }
+  public var int16Value: Swift.Int16 {
+    get
+    set
+  }
+  public var uInt16: Swift.UInt16? {
+    get
+    set
+  }
+  public var uInt16Value: Swift.UInt16 {
+    get
+    set
+  }
+  public var int32: Swift.Int32? {
+    get
+    set
+  }
+  public var int32Value: Swift.Int32 {
+    get
+    set
+  }
+  public var uInt32: Swift.UInt32? {
+    get
+    set
+  }
+  public var uInt32Value: Swift.UInt32 {
+    get
+    set
+  }
+  public var int64: Swift.Int64? {
+    get
+    set
+  }
+  public var int64Value: Swift.Int64 {
+    get
+    set
+  }
+  public var uInt64: Swift.UInt64? {
+    get
+    set
+  }
+  public var uInt64Value: Swift.UInt64 {
+    get
+    set
+  }
+}
+extension WhaleCloud.JSON : Swift.Comparable {
+}
+public func == (lhs: WhaleCloud.JSON, rhs: WhaleCloud.JSON) -> Swift.Bool
+public func <= (lhs: WhaleCloud.JSON, rhs: WhaleCloud.JSON) -> Swift.Bool
+public func >= (lhs: WhaleCloud.JSON, rhs: WhaleCloud.JSON) -> Swift.Bool
+public func > (lhs: WhaleCloud.JSON, rhs: WhaleCloud.JSON) -> Swift.Bool
+public func < (lhs: WhaleCloud.JSON, rhs: WhaleCloud.JSON) -> Swift.Bool
+public enum writingOptionsKeys {
+  case jsonSerialization
+  case castNilToNSNull
+  case maxObjextDepth
+  case encoding
+  public static func == (a: WhaleCloud.writingOptionsKeys, b: WhaleCloud.writingOptionsKeys) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension WhaleCloud.JSON : Swift.Codable {
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+open class SessionManager {
+  public enum MultipartFormDataEncodingResult {
+    case success(request: WhaleCloud.UploadRequest, streamingFromDisk: Swift.Bool, streamFileURL: Foundation.URL?)
+    case failure(any Swift.Error)
+  }
+  public static let `default`: WhaleCloud.SessionManager
+  public static let defaultHTTPHeaders: WhaleCloud.HTTPHeaders
+  public static let multipartFormDataEncodingMemoryThreshold: Swift.UInt64
+  final public let session: Foundation.URLSession
+  final public let delegate: WhaleCloud.SessionDelegate
+  open var startRequestsImmediately: Swift.Bool
+  open var adapter: (any WhaleCloud.RequestAdapter)?
+  open var retrier: (any WhaleCloud.RequestRetrier)? {
+    get
+    set
+  }
+  open var backgroundCompletionHandler: (() -> Swift.Void)?
+  public init(configuration: Foundation.URLSessionConfiguration = URLSessionConfiguration.default, delegate: WhaleCloud.SessionDelegate = SessionDelegate(), serverTrustPolicyManager: WhaleCloud.ServerTrustPolicyManager? = nil)
+  public init?(session: Foundation.URLSession, delegate: WhaleCloud.SessionDelegate, serverTrustPolicyManager: WhaleCloud.ServerTrustPolicyManager? = nil)
+  @objc deinit
+  @discardableResult
+  open func request(_ url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .get, parameters: WhaleCloud.Parameters? = nil, encoding: any WhaleCloud.ParameterEncoding = URLEncoding.default, headers: WhaleCloud.HTTPHeaders? = nil) -> WhaleCloud.DataRequest
+  @discardableResult
+  open func request(_ urlRequest: any WhaleCloud.URLRequestConvertible) -> WhaleCloud.DataRequest
+  @discardableResult
+  open func download(_ url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .get, parameters: WhaleCloud.Parameters? = nil, encoding: any WhaleCloud.ParameterEncoding = URLEncoding.default, headers: WhaleCloud.HTTPHeaders? = nil, to destination: WhaleCloud.DownloadRequest.DownloadFileDestination? = nil) -> WhaleCloud.DownloadRequest
+  @discardableResult
+  open func download(_ urlRequest: any WhaleCloud.URLRequestConvertible, to destination: WhaleCloud.DownloadRequest.DownloadFileDestination? = nil) -> WhaleCloud.DownloadRequest
+  @discardableResult
+  open func download(resumingWith resumeData: Foundation.Data, to destination: WhaleCloud.DownloadRequest.DownloadFileDestination? = nil) -> WhaleCloud.DownloadRequest
+  @discardableResult
+  open func upload(_ fileURL: Foundation.URL, to url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .post, headers: WhaleCloud.HTTPHeaders? = nil) -> WhaleCloud.UploadRequest
+  @discardableResult
+  open func upload(_ fileURL: Foundation.URL, with urlRequest: any WhaleCloud.URLRequestConvertible) -> WhaleCloud.UploadRequest
+  @discardableResult
+  open func upload(_ data: Foundation.Data, to url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .post, headers: WhaleCloud.HTTPHeaders? = nil) -> WhaleCloud.UploadRequest
+  @discardableResult
+  open func upload(_ data: Foundation.Data, with urlRequest: any WhaleCloud.URLRequestConvertible) -> WhaleCloud.UploadRequest
+  @discardableResult
+  open func upload(_ stream: Foundation.InputStream, to url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .post, headers: WhaleCloud.HTTPHeaders? = nil) -> WhaleCloud.UploadRequest
+  @discardableResult
+  open func upload(_ stream: Foundation.InputStream, with urlRequest: any WhaleCloud.URLRequestConvertible) -> WhaleCloud.UploadRequest
+  open func upload(multipartFormData: @escaping (WhaleCloud.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold, to url: any WhaleCloud.URLConvertible, method: WhaleCloud.HTTPMethod = .post, headers: WhaleCloud.HTTPHeaders? = nil, queue: Dispatch.DispatchQueue? = nil, encodingCompletion: ((WhaleCloud.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+  open func upload(multipartFormData: @escaping (WhaleCloud.MultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold, with urlRequest: any WhaleCloud.URLRequestConvertible, queue: Dispatch.DispatchQueue? = nil, encodingCompletion: ((WhaleCloud.SessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  @discardableResult
+  open func stream(withHostName hostName: Swift.String, port: Swift.Int) -> WhaleCloud.StreamRequest
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  @discardableResult
+  open func stream(with netService: Foundation.NetService) -> WhaleCloud.StreamRequest
+}
+@_inheritsConvenienceInitializers @objc public class WcMouseStatus : ObjectiveC.NSObject {
+  @objc public var x: Swift.Float
+  @objc public var y: Swift.Float
+  @objc public var x_delta: Swift.Int8
+  @objc public var y_delta: Swift.Int8
+  @objc public var button: Swift.UInt8
+  @objc public var scroll: Swift.Int8
+  @objc public var frame: CoreFoundation.CGRect
+  @objc override dynamic public init()
+  @objc public func set_leftButton(down: Swift.Bool)
+  @objc public func set_RightButton(down: Swift.Bool)
+  @objc public func set_ScrollButton(down: Swift.Bool)
+  @objc public func set_scroll(scroll: Swift.Int8)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class KeyEvent : ObjectiveC.NSObject {
+  @objc public var code: Swift.Int
+  @objc public var down: Swift.Bool
+  @objc override dynamic public init()
+  @objc deinit
+}
+open class MultipartFormData {
+  open var contentType: Swift.String {
+    get
+    set
+  }
+  public var contentLength: Swift.UInt64 {
+    get
+  }
+  public var boundary: Swift.String
+  public init()
+  public func append(_ data: Foundation.Data, withName name: Swift.String)
+  public func append(_ data: Foundation.Data, withName name: Swift.String, mimeType: Swift.String)
+  public func append(_ data: Foundation.Data, withName name: Swift.String, fileName: Swift.String, mimeType: Swift.String)
+  public func append(_ fileURL: Foundation.URL, withName name: Swift.String)
+  public func append(_ fileURL: Foundation.URL, withName name: Swift.String, fileName: Swift.String, mimeType: Swift.String)
+  public func append(_ stream: Foundation.InputStream, withLength length: Swift.UInt64, name: Swift.String, fileName: Swift.String, mimeType: Swift.String)
+  public func append(_ stream: Foundation.InputStream, withLength length: Swift.UInt64, headers: WhaleCloud.HTTPHeaders)
+  public func encode() throws -> Foundation.Data
+  public func writeEncodedData(to fileURL: Foundation.URL) throws
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class TouchEvent : ObjectiveC.NSObject {
+  @objc public var points: [WhaleCloud.TouchEvent.TouchPoint]
+  @objc public var activePointerIndex: Swift.UInt8
+  @objc public var activePointerAct: WhaleCloud.TouchEvent.Action
+  @objc public var cnt: Swift.UInt8
+  @objc public var frame: CoreFoundation.CGRect
+  @objc public enum Action : Swift.UInt8 {
+    case down = 0
+    case up = 1
+    case move = 2
+    case cancel = 3
+    public init?(rawValue: Swift.UInt8)
+    public typealias RawValue = Swift.UInt8
+    public var rawValue: Swift.UInt8 {
+      get
+    }
+  }
+  @objc override dynamic public init()
+  @objc public func toString() -> Swift.String
+  @_inheritsConvenienceInitializers @objc public class TouchPoint : ObjectiveC.NSObject {
+    @objc public var tag: Swift.String
+    @objc public var index: Swift.UInt8
+    @objc public var x: Swift.Float32
+    @objc public var y: Swift.Float32
+    @objc public var act: WhaleCloud.TouchEvent.Action
+    @objc public var toolType: Swift.UInt8
+    @objc override dynamic public init()
+    @objc deinit
+  }
+  @objc deinit
+}
+public protocol SSLTrustValidator {
+  func isValid(_ trust: Security.SecTrust, domain: Swift.String?) -> Swift.Bool
+}
+open class SSLCert {
+  public init(data: Foundation.Data)
+  public init(key: Security.SecKey)
+  @objc deinit
+}
+open class SSLSecurity : WhaleCloud.SSLTrustValidator {
+  public var validatedDN: Swift.Bool
+  public var validateEntireChain: Swift.Bool
+  convenience public init(usePublicKeys: Swift.Bool = false)
+  public init(certs: [WhaleCloud.SSLCert], usePublicKeys: Swift.Bool)
+  open func isValid(_ trust: Security.SecTrust, domain: Swift.String?) -> Swift.Bool
+  public func extractPublicKey(_ data: Foundation.Data) -> Security.SecKey?
+  public func extractPublicKey(_ cert: Security.SecCertificate, policy: Security.SecPolicy) -> Security.SecKey?
+  public func certificateChain(_ trust: Security.SecTrust) -> [Foundation.Data]
+  public func publicKeyChain(_ trust: Security.SecTrust) -> [Security.SecKey]
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers open class NetworkReachabilityManager {
+  public enum NetworkReachabilityStatus {
+    case unknown
+    case notReachable
+    case reachable(WhaleCloud.NetworkReachabilityManager.ConnectionType)
+  }
+  public enum ConnectionType {
+    case ethernetOrWiFi
+    case wwan
+    public static func == (a: WhaleCloud.NetworkReachabilityManager.ConnectionType, b: WhaleCloud.NetworkReachabilityManager.ConnectionType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public typealias Listener = (WhaleCloud.NetworkReachabilityManager.NetworkReachabilityStatus) -> Swift.Void
+  open var isReachable: Swift.Bool {
+    get
+  }
+  open var isReachableOnWWAN: Swift.Bool {
+    get
+  }
+  open var isReachableOnEthernetOrWiFi: Swift.Bool {
+    get
+  }
+  open var networkReachabilityStatus: WhaleCloud.NetworkReachabilityManager.NetworkReachabilityStatus {
+    get
+  }
+  open var listenerQueue: Dispatch.DispatchQueue
+  open var listener: WhaleCloud.NetworkReachabilityManager.Listener?
+  open var flags: SystemConfiguration.SCNetworkReachabilityFlags? {
+    get
+  }
+  open var previousFlags: SystemConfiguration.SCNetworkReachabilityFlags
+  convenience public init?(host: Swift.String)
+  convenience public init?()
+  @objc deinit
+  @discardableResult
+  open func startListening() -> Swift.Bool
+  open func stopListening()
+}
+extension WhaleCloud.NetworkReachabilityManager.NetworkReachabilityStatus : Swift.Equatable {
+}
+public func == (lhs: WhaleCloud.NetworkReachabilityManager.NetworkReachabilityStatus, rhs: WhaleCloud.NetworkReachabilityManager.NetworkReachabilityStatus) -> Swift.Bool
+public let WebsocketDidConnectNotification: Swift.String
+public let WebsocketDidDisconnectNotification: Swift.String
+public let WebsocketDisconnectionErrorKeyName: Swift.String
+public enum CloseCode : Swift.UInt16 {
+  case normal
+  case goingAway
+  case protocolError
+  case protocolUnhandledType
+  case noStatusReceived
+  case encoding
+  case policyViolated
+  case messageTooBig
+  public init?(rawValue: Swift.UInt16)
+  public typealias RawValue = Swift.UInt16
+  public var rawValue: Swift.UInt16 {
+    get
+  }
+}
+public enum ErrorType : Swift.Error {
+  case outputStreamWriteError
+  case compressionError
+  case invalidSSLError
+  case writeTimeoutError
+  case protocolError
+  case upgradeError
+  case closeError
+  public static func == (a: WhaleCloud.ErrorType, b: WhaleCloud.ErrorType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct WSError : Swift.Error {
+  public let type: WhaleCloud.ErrorType
+  public let message: Swift.String
+  public let code: Swift.Int
+}
+public protocol WebSocketClient : AnyObject {
+  var delegate: (any WhaleCloud.WebSocketDelegate)? { get set }
+  var pongDelegate: (any WhaleCloud.WebSocketPongDelegate)? { get set }
+  var disableSSLCertValidation: Swift.Bool { get set }
+  var overrideTrustHostname: Swift.Bool { get set }
+  var desiredTrustHostname: Swift.String? { get set }
+  var sslClientCertificate: WhaleCloud.SSLClientCertificate? { get set }
+  var security: (any WhaleCloud.SSLTrustValidator)? { get set }
+  var enabledSSLCipherSuites: [Security.SSLCipherSuite]? { get set }
+  var isConnected: Swift.Bool { get }
+  func connect()
+  func disconnect(forceTimeout: Foundation.TimeInterval?, closeCode: Swift.UInt16)
+  func write(string: Swift.String, completion: (() -> ())?)
+  func write(data: Foundation.Data, completion: (() -> ())?)
+  func write(ping: Foundation.Data, completion: (() -> ())?)
+  func write(pong: Foundation.Data, completion: (() -> ())?)
+}
+extension WhaleCloud.WebSocketClient {
+  public func write(string: Swift.String)
+  public func write(data: Foundation.Data)
+  public func write(ping: Foundation.Data)
+  public func write(pong: Foundation.Data)
+  public func disconnect()
+}
+public struct SSLSettings {
+  public let useSSL: Swift.Bool
+  public let disableCertValidation: Swift.Bool
+  public var overrideTrustHostname: Swift.Bool
+  public var desiredTrustHostname: Swift.String?
+  public let sslClientCertificate: WhaleCloud.SSLClientCertificate?
+  public let cipherSuites: [Security.SSLCipherSuite]?
+}
+public protocol WSStreamDelegate : AnyObject {
+  func newBytesInStream()
+  func streamDidError(error: (any Swift.Error)?)
+}
+public protocol WSStream {
+  var delegate: (any WhaleCloud.WSStreamDelegate)? { get set }
+  func connect(url: Foundation.URL, port: Swift.Int, timeout: Foundation.TimeInterval, ssl: WhaleCloud.SSLSettings, completion: @escaping (((any Swift.Error)?) -> Swift.Void))
+  func write(data: Foundation.Data) -> Swift.Int
+  func read() -> Foundation.Data?
+  func cleanup()
+  func sslTrust() -> (trust: Security.SecTrust?, domain: Swift.String?)
+}
+@objc @_inheritsConvenienceInitializers open class FoundationStream : ObjectiveC.NSObject, WhaleCloud.WSStream, Foundation.StreamDelegate {
+  weak public var delegate: (any WhaleCloud.WSStreamDelegate)?
+  public var enableSOCKSProxy: Swift.Bool
+  public func connect(url: Foundation.URL, port: Swift.Int, timeout: Foundation.TimeInterval, ssl: WhaleCloud.SSLSettings, completion: @escaping (((any Swift.Error)?) -> Swift.Void))
+  public func write(data: Foundation.Data) -> Swift.Int
+  public func read() -> Foundation.Data?
+  public func cleanup()
+  public func sslTrust() -> (trust: Security.SecTrust?, domain: Swift.String?)
+  @objc open func stream(_ aStream: Foundation.Stream, handle eventCode: Foundation.Stream.Event)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol WebSocketDelegate : AnyObject {
+  func websocketDidConnect(socket: any WhaleCloud.WebSocketClient)
+  func websocketDidDisconnect(socket: any WhaleCloud.WebSocketClient, error: (any Swift.Error)?)
+  func websocketDidReceiveMessage(socket: any WhaleCloud.WebSocketClient, text: Swift.String)
+  func websocketDidReceiveData(socket: any WhaleCloud.WebSocketClient, data: Foundation.Data)
+}
+public protocol WebSocketPongDelegate : AnyObject {
+  func websocketDidReceivePong(socket: any WhaleCloud.WebSocketClient, data: Foundation.Data?)
+}
+public protocol WebSocketAdvancedDelegate : AnyObject {
+  func websocketDidConnect(socket: WhaleCloud.WebSocket)
+  func websocketDidDisconnect(socket: WhaleCloud.WebSocket, error: (any Swift.Error)?)
+  func websocketDidReceiveMessage(socket: WhaleCloud.WebSocket, text: Swift.String, response: WhaleCloud.WebSocket.WSResponse)
+  func websocketDidReceiveData(socket: WhaleCloud.WebSocket, data: Foundation.Data, response: WhaleCloud.WebSocket.WSResponse)
+  func websocketHttpUpgrade(socket: WhaleCloud.WebSocket, request: Swift.String)
+  func websocketHttpUpgrade(socket: WhaleCloud.WebSocket, response: Swift.String)
+}
+@objc open class WebSocket : ObjectiveC.NSObject, Foundation.StreamDelegate, WhaleCloud.WebSocketClient, WhaleCloud.WSStreamDelegate {
+  public enum OpCode : Swift.UInt8 {
+    case continueFrame
+    case textFrame
+    case binaryFrame
+    case connectionClose
+    case ping
+    case pong
+    public init?(rawValue: Swift.UInt8)
+    public typealias RawValue = Swift.UInt8
+    public var rawValue: Swift.UInt8 {
+      get
+    }
+  }
+  public static let ErrorDomain: Swift.String
+  public var callbackQueue: Dispatch.DispatchQueue
+  @_hasMissingDesignatedInitializers public class WSResponse {
+    public var code: WhaleCloud.WebSocket.OpCode
+    public var frameCount: Swift.Int
+    public var buffer: Foundation.NSMutableData?
+    final public let firstFrame: Foundation.Date
+    @objc deinit
+  }
+  weak public var delegate: (any WhaleCloud.WebSocketDelegate)?
+  weak public var advancedDelegate: (any WhaleCloud.WebSocketAdvancedDelegate)?
+  weak public var pongDelegate: (any WhaleCloud.WebSocketPongDelegate)?
+  public var onConnect: (() -> Swift.Void)?
+  public var onDisconnect: (((any Swift.Error)?) -> Swift.Void)?
+  public var onText: ((Swift.String) -> Swift.Void)?
+  public var onData: ((Foundation.Data) -> Swift.Void)?
+  public var onPong: ((Foundation.Data?) -> Swift.Void)?
+  public var onHttpResponseHeaders: (([Swift.String : Swift.String]) -> Swift.Void)?
+  public var disableSSLCertValidation: Swift.Bool
+  public var overrideTrustHostname: Swift.Bool
+  public var desiredTrustHostname: Swift.String?
+  public var sslClientCertificate: WhaleCloud.SSLClientCertificate?
+  public var enableCompression: Swift.Bool
+  public var security: (any WhaleCloud.SSLTrustValidator)?
+  public var enabledSSLCipherSuites: [Security.SSLCipherSuite]?
+  public var isConnected: Swift.Bool {
+    get
+  }
+  public var request: Foundation.URLRequest
+  public var currentURL: Foundation.URL {
+    get
+  }
+  public var respondToPingWithPong: Swift.Bool
+  public init(request: Foundation.URLRequest, protocols: [Swift.String]? = nil, stream: any WhaleCloud.WSStream = FoundationStream())
+  convenience public init(url: Foundation.URL, protocols: [Swift.String]? = nil)
+  convenience public init(url: Foundation.URL, writeQueueQOS: Foundation.QualityOfService, protocols: [Swift.String]? = nil)
+  open func connect()
+  open func disconnect(forceTimeout: Foundation.TimeInterval? = nil, closeCode: Swift.UInt16 = CloseCode.normal.rawValue)
+  open func write(string: Swift.String, completion: (() -> ())? = nil)
+  open func write(data: Foundation.Data, completion: (() -> ())? = nil)
+  open func write(ping: Foundation.Data, completion: (() -> ())? = nil)
+  open func write(pong: Foundation.Data, completion: (() -> ())? = nil)
+  public func newBytesInStream()
+  public func streamDidError(error: (any Swift.Error)?)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class GamePad : ObjectiveC.NSObject {
+  @objc public enum GamePadBtnKey : Swift.UInt16 {
+    case BTN_A = 0x1000
+    case BTN_B = 0x2000
+    case BTN_X = 0x4000
+    case BTN_Y = 0x8000
+    case BTN_LB = 0x0100
+    case BTN_RB = 0x0200
+    case BTN_LT = 0x0400
+    case BTN_RT = 0x0800
+    case BTN_L3 = 0x0040
+    case BTN_R3 = 0x0080
+    case BTN_UP = 0x0001
+    case BTN_DOWN = 0x0002
+    case BTN_LEFT = 0x0004
+    case BTN_RIGHT = 0x0008
+    case BTN_BACK = 0x0020
+    case BTN_START = 0x0010
+    public init?(rawValue: Swift.UInt16)
+    public typealias RawValue = Swift.UInt16
+    public var rawValue: Swift.UInt16 {
+      get
+    }
+  }
+  @objc public class Rocker : ObjectiveC.NSObject {
+    @objc public var bg: UIKit.UIButton
+    @objc public var stick: UIKit.UIButton
+    @objc public var rSmall: CoreFoundation.CGFloat
+    @objc public var rBig: CoreFoundation.CGFloat
+    @objc public var position: Swift.Int8
+    @objc public init(bg: UIKit.UIButton, stick: UIKit.UIButton, rSmall: CoreFoundation.CGFloat, rBig: CoreFoundation.CGFloat, position: Swift.Int8)
+    @objc deinit
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public enum JyCode : Swift.Int32 {
+  case EVENT_SDK_INIT = 50000
+  case ERR_BS_CONNECT = 40000
+  case ERR_BS_CERT = 40001
+  case EVENT_BS_SUCC = 51000
+  case EVENT_BS_QUE = 51102
+  case EVENT_BS_QUE_OK = 51103
+  case ERR_BS_FAIL = 41104
+  case EVENT_BS_SAVE_PROCESS = 41106
+  case EVENT_BS_CANCLE_QUE_SUCC = 51107
+  case EVENT_BS_CANCLE_QUE_FAIL = 41108
+  case EVENT_MS_OK = 52000
+  case ERR_MS_SIGNIN_TIMEOUT = 42000
+  case EVENT_RTC_CONNECTED = 53000
+  case ERR_RTC_CONNECT = 43000
+  case EVENT_GS_GAME_STARTED = 54000
+  case EVENT_GS_GAME_EXIT = 54001
+  case ERR_GS_START_GAME = 44000
+  case ERR_GS_GAME_FAIL = 44001
+  case EVENT_GAME_MODIFIED = 44002
+  case EVENT_PREALARM = 45001
+  case EVENT_ALARM = 45002
+  case EVENT_SET_LEVEL_SUCC = 45003
+  case EVENT_SET_LEVEL_FAIL = 45004
+  case EVENT_TAKENOVER = 54002
+  case EVENT_AUTH_OPT_BY_HOST = 54003
+  case EVENT_SESSION_NOT_EXSIT = 44003
+  case EVENT_HANGUP_TIME_MODIFIED = 54102
+  case EVENT_HANGUP_SUCC = 54103
+  case EVENT_HANGUP_TIME_MODIFIED_FAIL = 44102
+  case EVENT_HANGUP_FAILED = 44103
+  case EVENT_AUTH_OPT_SUCC = 54104
+  case EVENT_AUTH_OPT_FAIL = 44104
+  case EVENT_CHANGE_HANDLE_SUCC = 54105
+  case EVENT_CHANGE_HANDLE_FAIL = 44105
+  case EVENT_RESTART_GAME_SUCC = 54106
+  case EVENT_RESTART_GAME_FAIL = 44106
+  case EVENT_OTHER = 99999
+  case ERR_TOO_QUICK = 88888
+  case EVENT_HAS_LINK = 60000
+  case EVENT_HAS_NO_LINK = 60001
+  case EVENT_FORWARD_CHL_CONNECTED = 70001
+  case EVENT_RUNAS_SUCC = 54107
+  case EVENT_RUNAS_FAIL = 44107
+  case EVENT_MONITOR_GET_FAIL = 44108
+  case EVNET_MONITOR_CHANGE_SUCC = 54109
+  case EVENT_MONITOR_CHANGE_FAIL = 44109
+  case EVENT_MANUAL_SAVE_SUCC = 54110
+  case EVENT_MANUAL_SAVE_FAIL = 44110
+  case WRN_WIN_SIZE_CHANGED = 30001
+  case WRN_GAME_GET_SAVE_FAIL = 30002
+  case WRN_GAME_POST_SAVE_FAIL = 30003
+  case WRN_GAME_SAVE_NOT_CHANGED = 30004
+  public init?(rawValue: Swift.Int32)
+  public typealias RawValue = Swift.Int32
+  public var rawValue: Swift.Int32 {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc public class WcLogUtil : ObjectiveC.NSObject {
+  @objc public enum Severity : Swift.UInt8 {
+    case LS_INFO = 4
+    case LS_DEBUG = 3
+    case LS_WARNING = 2
+    case LS_ERROR = 1
+    case LS_NONE = 0
+    public init?(rawValue: Swift.UInt8)
+    public typealias RawValue = Swift.UInt8
+    public var rawValue: Swift.UInt8 {
+      get
+    }
+  }
+  @objc public static func enableLogToDebugOutput(level: WhaleCloud.WcLogUtil.Severity)
+  public static func e(_ log: Swift.String)
+  public static func w(_ log: Swift.String)
+  public static func debug(_ log: Swift.String)
+  public static func info(_ log: Swift.String)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public struct Timeline {
+  public let requestStartTime: CoreFoundation.CFAbsoluteTime
+  public let initialResponseTime: CoreFoundation.CFAbsoluteTime
+  public let requestCompletedTime: CoreFoundation.CFAbsoluteTime
+  public let serializationCompletedTime: CoreFoundation.CFAbsoluteTime
+  public let latency: Foundation.TimeInterval
+  public let requestDuration: Foundation.TimeInterval
+  public let serializationDuration: Foundation.TimeInterval
+  public let totalDuration: Foundation.TimeInterval
+  public init(requestStartTime: CoreFoundation.CFAbsoluteTime = 0.0, initialResponseTime: CoreFoundation.CFAbsoluteTime = 0.0, requestCompletedTime: CoreFoundation.CFAbsoluteTime = 0.0, serializationCompletedTime: CoreFoundation.CFAbsoluteTime = 0.0)
+}
+extension WhaleCloud.Timeline : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension WhaleCloud.Timeline : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+public struct DefaultDataResponse {
+  public let request: Foundation.URLRequest?
+  public let response: Foundation.HTTPURLResponse?
+  public let data: Foundation.Data?
+  public let error: (any Swift.Error)?
+  public let timeline: WhaleCloud.Timeline
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?, timeline: WhaleCloud.Timeline = Timeline(), metrics: Swift.AnyObject? = nil)
+}
+public struct DataResponse<Value> {
+  public let request: Foundation.URLRequest?
+  public let response: Foundation.HTTPURLResponse?
+  public let data: Foundation.Data?
+  public let result: WhaleCloud.Result<Value>
+  public let timeline: WhaleCloud.Timeline
+  public var value: Value? {
+    get
+  }
+  public var error: (any Swift.Error)? {
+    get
+  }
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, result: WhaleCloud.Result<Value>, timeline: WhaleCloud.Timeline = Timeline())
+}
+extension WhaleCloud.DataResponse : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension WhaleCloud.DataResponse {
+  public func map<T>(_ transform: (Value) -> T) -> WhaleCloud.DataResponse<T>
+  public func flatMap<T>(_ transform: (Value) throws -> T) -> WhaleCloud.DataResponse<T>
+  public func mapError<E>(_ transform: (any Swift.Error) -> E) -> WhaleCloud.DataResponse<Value> where E : Swift.Error
+  public func flatMapError<E>(_ transform: (any Swift.Error) throws -> E) -> WhaleCloud.DataResponse<Value> where E : Swift.Error
+}
+public struct DefaultDownloadResponse {
+  public let request: Foundation.URLRequest?
+  public let response: Foundation.HTTPURLResponse?
+  public let temporaryURL: Foundation.URL?
+  public let destinationURL: Foundation.URL?
+  public let resumeData: Foundation.Data?
+  public let error: (any Swift.Error)?
+  public let timeline: WhaleCloud.Timeline
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, temporaryURL: Foundation.URL?, destinationURL: Foundation.URL?, resumeData: Foundation.Data?, error: (any Swift.Error)?, timeline: WhaleCloud.Timeline = Timeline(), metrics: Swift.AnyObject? = nil)
+}
+public struct DownloadResponse<Value> {
+  public let request: Foundation.URLRequest?
+  public let response: Foundation.HTTPURLResponse?
+  public let temporaryURL: Foundation.URL?
+  public let destinationURL: Foundation.URL?
+  public let resumeData: Foundation.Data?
+  public let result: WhaleCloud.Result<Value>
+  public let timeline: WhaleCloud.Timeline
+  public var value: Value? {
+    get
+  }
+  public var error: (any Swift.Error)? {
+    get
+  }
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, temporaryURL: Foundation.URL?, destinationURL: Foundation.URL?, resumeData: Foundation.Data?, result: WhaleCloud.Result<Value>, timeline: WhaleCloud.Timeline = Timeline())
+}
+extension WhaleCloud.DownloadResponse : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension WhaleCloud.DownloadResponse {
+  public func map<T>(_ transform: (Value) -> T) -> WhaleCloud.DownloadResponse<T>
+  public func flatMap<T>(_ transform: (Value) throws -> T) -> WhaleCloud.DownloadResponse<T>
+  public func mapError<E>(_ transform: (any Swift.Error) -> E) -> WhaleCloud.DownloadResponse<Value> where E : Swift.Error
+  public func flatMapError<E>(_ transform: (any Swift.Error) throws -> E) -> WhaleCloud.DownloadResponse<Value> where E : Swift.Error
+}
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+extension WhaleCloud.DefaultDataResponse {
+  public var metrics: Foundation.URLSessionTaskMetrics? {
+    get
+  }
+}
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+extension WhaleCloud.DataResponse {
+  public var metrics: Foundation.URLSessionTaskMetrics? {
+    get
+  }
+}
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+extension WhaleCloud.DefaultDownloadResponse {
+  public var metrics: Foundation.URLSessionTaskMetrics? {
+    get
+  }
+}
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+extension WhaleCloud.DownloadResponse {
+  public var metrics: Foundation.URLSessionTaskMetrics? {
+    get
+  }
+}
+open class ServerTrustPolicyManager {
+  final public let policies: [Swift.String : WhaleCloud.ServerTrustPolicy]
+  public init(policies: [Swift.String : WhaleCloud.ServerTrustPolicy])
+  open func serverTrustPolicy(forHost host: Swift.String) -> WhaleCloud.ServerTrustPolicy?
+  @objc deinit
+}
+public enum ServerTrustPolicy {
+  case performDefaultEvaluation(validateHost: Swift.Bool)
+  case performRevokedEvaluation(validateHost: Swift.Bool, revocationFlags: CoreFoundation.CFOptionFlags)
+  case pinCertificates(certificates: [Security.SecCertificate], validateCertificateChain: Swift.Bool, validateHost: Swift.Bool)
+  case pinPublicKeys(publicKeys: [Security.SecKey], validateCertificateChain: Swift.Bool, validateHost: Swift.Bool)
+  case disableEvaluation
+  case customEvaluation((_ serverTrust: Security.SecTrust, _ host: Swift.String) -> Swift.Bool)
+  public static func certificates(in bundle: Foundation.Bundle = Bundle.main) -> [Security.SecCertificate]
+  public static func publicKeys(in bundle: Foundation.Bundle = Bundle.main) -> [Security.SecKey]
+  public func evaluate(_ serverTrust: Security.SecTrust, forHost host: Swift.String) -> Swift.Bool
+}
+extension WhaleCloud.Request {
+  public enum ValidationResult {
+    case success
+    case failure(any Swift.Error)
+  }
+}
+extension WhaleCloud.DataRequest {
+  public typealias Validation = (Foundation.URLRequest?, Foundation.HTTPURLResponse, Foundation.Data?) -> WhaleCloud.Request.ValidationResult
+  @discardableResult
+  public func validate(_ validation: @escaping WhaleCloud.DataRequest.Validation) -> Self
+  @discardableResult
+  public func validate<S>(statusCode acceptableStatusCodes: S) -> Self where S : Swift.Sequence, S.Element == Swift.Int
+  @discardableResult
+  public func validate<S>(contentType acceptableContentTypes: S) -> Self where S : Swift.Sequence, S.Element == Swift.String
+  @discardableResult
+  public func validate() -> Self
+}
+extension WhaleCloud.DownloadRequest {
+  public typealias Validation = (_ request: Foundation.URLRequest?, _ response: Foundation.HTTPURLResponse, _ temporaryURL: Foundation.URL?, _ destinationURL: Foundation.URL?) -> WhaleCloud.Request.ValidationResult
+  @discardableResult
+  public func validate(_ validation: @escaping WhaleCloud.DownloadRequest.Validation) -> Self
+  @discardableResult
+  public func validate<S>(statusCode acceptableStatusCodes: S) -> Self where S : Swift.Sequence, S.Element == Swift.Int
+  @discardableResult
+  public func validate<S>(contentType acceptableContentTypes: S) -> Self where S : Swift.Sequence, S.Element == Swift.String
+  @discardableResult
+  public func validate() -> Self
+}
+public enum Result<Value> {
+  case success(Value)
+  case failure(any Swift.Error)
+  public var isSuccess: Swift.Bool {
+    get
+  }
+  public var isFailure: Swift.Bool {
+    get
+  }
+  public var value: Value? {
+    get
+  }
+  public var error: (any Swift.Error)? {
+    get
+  }
+}
+extension WhaleCloud.Result : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension WhaleCloud.Result : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension WhaleCloud.Result {
+  public init(value: () throws -> Value)
+  public func unwrap() throws -> Value
+  public func map<T>(_ transform: (Value) -> T) -> WhaleCloud.Result<T>
+  public func flatMap<T>(_ transform: (Value) throws -> T) -> WhaleCloud.Result<T>
+  public func mapError<T>(_ transform: (any Swift.Error) -> T) -> WhaleCloud.Result<Value> where T : Swift.Error
+  public func flatMapError<T>(_ transform: (any Swift.Error) throws -> T) -> WhaleCloud.Result<Value> where T : Swift.Error
+  @discardableResult
+  public func withValue(_ closure: (Value) throws -> Swift.Void) rethrows -> WhaleCloud.Result<Value>
+  @discardableResult
+  public func withError(_ closure: (any Swift.Error) throws -> Swift.Void) rethrows -> WhaleCloud.Result<Value>
+  @discardableResult
+  public func ifSuccess(_ closure: () throws -> Swift.Void) rethrows -> WhaleCloud.Result<Value>
+  @discardableResult
+  public func ifFailure(_ closure: () throws -> Swift.Void) rethrows -> WhaleCloud.Result<Value>
+}
+@objc public protocol WhaleCloudDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func onEngineStop()
+  @objc func onEngineStarting()
+  @objc func onMonitorNumber(number: Swift.Int)
+  @objc func onEngineQos(qos: [Swift.String : Swift.String])
+  @objc func onEngineEvent(code: Swift.Int32, msg: Swift.String)
+  @objc func onEngineError(code: Swift.Int32, msg: Swift.String)
+  @objc func onEngineStart(_ view: UIKit.UIViewController)
+  @objc func onEngineMsg(sessisonId: Swift.String, msg: Swift.String)
+  @objc func onEngineFeedback(event: WhaleCloud.WcFeedBackEvent)
+}
+@objc @_inheritsConvenienceInitializers public class WhaleCloud : ObjectiveC.NSObject {
+  @objc public static let instance: WhaleCloud.WhaleCloud
+  @objc weak public var delegate: (any WhaleCloud.WhaleCloudDelegate)?
+  @objc override dynamic public init()
+  @objc public func setBundleCf(bundle: Foundation.Bundle)
+  @objc public func getVideoViewControllerCf() -> UIKit.UIViewController
+  @objc public func setWhaleDelegateCf(wcDelegate: any WhaleCloud.WhaleCloudDelegate)
+  @objc public func sendGamepadEventCf(player: WhaleCloud.tController) -> Swift.Bool
+  @objc public func enableSpeakerCf(on: Swift.Bool)
+  @objc public func sendKeyBoardEventCf(event: WhaleCloud.KeyEvent) -> Swift.Bool
+  @objc public func sendMouseEventCf(mouseStatus: WhaleCloud.WcMouseStatus) -> Swift.Bool
+  @objc public func sendTouchEventCf(event: WhaleCloud.TouchEvent) -> Swift.Bool
+  @objc public func repeatSendMouseEventCf(mouseStatus: WhaleCloud.WcMouseStatus) -> Swift.Bool
+  @objc public func repeatSendKeyBoardEventCf(event: WhaleCloud.KeyEvent) -> Swift.Bool
+  @objc public func repeatSendGamepadEventCf(player: WhaleCloud.tController) -> Swift.Bool
+  @objc public func sdkLoadingCf(channelId: Swift.String, bsUrl: Swift.String, token: Swift.String, sn: Swift.String) -> Swift.Bool
+  @objc public func startCf(gameData: Swift.String) -> Swift.Bool
+  @objc public func getSNCf() -> Swift.String
+  @objc public func setServiceLevelCf(level_config: Swift.String) -> Swift.Bool
+  @objc public func getVersionNameCf() -> Swift.String
+  @objc public func sendMsgToGameCf(msg: Swift.String) -> Swift.Bool
+  @objc public func takePlayGameCf(gameData: Swift.String) -> Swift.Bool
+  @objc public func reconPlayGameCf(gameData: Swift.String) -> Swift.Bool
+  @objc public func hangUpCf(hang_up_config: Swift.String) -> Swift.Bool
+  @objc public func sethangUpTimerCf(hang_up_config: Swift.String) -> Swift.Bool
+  @objc public func setRoomHandleCf(handle_config: Swift.String) -> Swift.Bool
+  @objc public func muteCf(isMute: Swift.Bool) -> Swift.Bool
+  @objc public func sendChangeHandleCf(roomKey: Swift.String, change: Swift.String) -> Swift.Bool
+  @objc public func sendRestartGameCf(saveTime: Swift.String, saveEnable: Swift.Int) -> Swift.Bool
+  @objc public func stopEngineCf() -> Swift.Bool
+  @objc public func sendRestartGameWithConfigCf(saveConfig: Swift.String, saveTime: Swift.String, saveEnable: Swift.Int) -> Swift.Bool
+  @objc public func stopEngineCf(msg: Swift.String, keepSession: Swift.Bool) -> Swift.Bool
+  @objc public func sendTextCf(encodeType: WhaleCloud.TextEncodeType, data: [Swift.UInt8]) -> Swift.Bool
+  @objc public func sendRunasCf(run_path: Swift.String, run_args: Swift.String) -> Swift.Bool
+  @objc public func getMonitorNumberCf() -> Swift.Bool
+  @objc public func changeMonitorCf(monitorID: Swift.Int) -> Swift.Bool
+  @objc public func manualSaveCf(saveConfig: Swift.String) -> Swift.Bool
+  @objc public func setVolume(volume: Swift.Double)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class WhaleCloudParam : ObjectiveC.NSObject {
+  @objc public var gs_name: Swift.String
+  @objc public var queue_grade: Swift.Int
+  @objc public var game_key: Swift.String
+  @objc public var save_time: Swift.String
+  @objc public var room_name: Swift.String
+  @objc public var game_args: Swift.String
+  @objc public var display_grade: Swift.Int
+  @objc public var able_queue: Swift.Bool
+  @objc public var start_resolution: Swift.String
+  @objc public var record_game_time: Swift.String
+  @objc public var model_name: Swift.String
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol RequestAdapter {
+  func adapt(_ urlRequest: Foundation.URLRequest) throws -> Foundation.URLRequest
+}
+public typealias RequestRetryCompletion = (_ shouldRetry: Swift.Bool, _ timeDelay: Foundation.TimeInterval) -> Swift.Void
+public protocol RequestRetrier {
+  func should(_ manager: WhaleCloud.SessionManager, retry request: WhaleCloud.Request, with error: any Swift.Error, completion: @escaping WhaleCloud.RequestRetryCompletion)
+}
+public typealias HTTPHeaders = [Swift.String : Swift.String]
+@_hasMissingDesignatedInitializers open class Request {
+  public typealias ProgressHandler = (Foundation.Progress) -> Swift.Void
+  open var delegate: WhaleCloud.TaskDelegate {
+    get
+  }
+  open var task: Foundation.URLSessionTask? {
+    get
+  }
+  final public let session: Foundation.URLSession
+  open var request: Foundation.URLRequest? {
+    get
+  }
+  open var response: Foundation.HTTPURLResponse? {
+    get
+  }
+  open var retryCount: Swift.UInt {
+    get
+  }
+  @discardableResult
+  open func authenticate(user: Swift.String, password: Swift.String, persistence: Foundation.URLCredential.Persistence = .forSession) -> Self
+  @discardableResult
+  open func authenticate(usingCredential credential: Foundation.URLCredential) -> Self
+  open class func authorizationHeader(user: Swift.String, password: Swift.String) -> (key: Swift.String, value: Swift.String)?
+  open func resume()
+  open func suspend()
+  open func cancel()
+  @objc deinit
+}
+extension WhaleCloud.Request : Swift.CustomStringConvertible {
+  open var description: Swift.String {
+    get
+  }
+}
+extension WhaleCloud.Request : Swift.CustomDebugStringConvertible {
+  open var debugDescription: Swift.String {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers open class DataRequest : WhaleCloud.Request {
+  override open var request: Foundation.URLRequest? {
+    get
+  }
+  open var progress: Foundation.Progress {
+    get
+  }
+  @discardableResult
+  open func stream(closure: ((Foundation.Data) -> Swift.Void)? = nil) -> Self
+  @discardableResult
+  open func downloadProgress(queue: Dispatch.DispatchQueue = DispatchQueue.main, closure: @escaping WhaleCloud.DataRequest.ProgressHandler) -> Self
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers open class DownloadRequest : WhaleCloud.Request {
+  public struct DownloadOptions : Swift.OptionSet {
+    public let rawValue: Swift.UInt
+    public static let createIntermediateDirectories: WhaleCloud.DownloadRequest.DownloadOptions
+    public static let removePreviousFile: WhaleCloud.DownloadRequest.DownloadOptions
+    public init(rawValue: Swift.UInt)
+    public typealias ArrayLiteralElement = WhaleCloud.DownloadRequest.DownloadOptions
+    public typealias Element = WhaleCloud.DownloadRequest.DownloadOptions
+    public typealias RawValue = Swift.UInt
+  }
+  public typealias DownloadFileDestination = (_ temporaryURL: Foundation.URL, _ response: Foundation.HTTPURLResponse) -> (destinationURL: Foundation.URL, options: WhaleCloud.DownloadRequest.DownloadOptions)
+  override open var request: Foundation.URLRequest? {
+    get
+  }
+  open var resumeData: Foundation.Data? {
+    get
+  }
+  open var progress: Foundation.Progress {
+    get
+  }
+  override open func cancel()
+  open func cancel(createResumeData: Swift.Bool)
+  @discardableResult
+  open func downloadProgress(queue: Dispatch.DispatchQueue = DispatchQueue.main, closure: @escaping WhaleCloud.DownloadRequest.ProgressHandler) -> Self
+  open class func suggestedDownloadDestination(for directory: Foundation.FileManager.SearchPathDirectory = .documentDirectory, in domain: Foundation.FileManager.SearchPathDomainMask = .userDomainMask) -> WhaleCloud.DownloadRequest.DownloadFileDestination
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers open class UploadRequest : WhaleCloud.DataRequest {
+  override open var request: Foundation.URLRequest? {
+    get
+  }
+  open var uploadProgress: Foundation.Progress {
+    get
+  }
+  @discardableResult
+  open func uploadProgress(queue: Dispatch.DispatchQueue = DispatchQueue.main, closure: @escaping WhaleCloud.UploadRequest.ProgressHandler) -> Self
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+open class StreamRequest : WhaleCloud.Request {
+  @objc deinit
+}
+public enum AFError : Swift.Error {
+  public enum ParameterEncodingFailureReason {
+    case missingURL
+    case jsonEncodingFailed(error: any Swift.Error)
+    case propertyListEncodingFailed(error: any Swift.Error)
+  }
+  public enum MultipartEncodingFailureReason {
+    case bodyPartURLInvalid(url: Foundation.URL)
+    case bodyPartFilenameInvalid(in: Foundation.URL)
+    case bodyPartFileNotReachable(at: Foundation.URL)
+    case bodyPartFileNotReachableWithError(atURL: Foundation.URL, error: any Swift.Error)
+    case bodyPartFileIsDirectory(at: Foundation.URL)
+    case bodyPartFileSizeNotAvailable(at: Foundation.URL)
+    case bodyPartFileSizeQueryFailedWithError(forURL: Foundation.URL, error: any Swift.Error)
+    case bodyPartInputStreamCreationFailed(for: Foundation.URL)
+    case outputStreamCreationFailed(for: Foundation.URL)
+    case outputStreamFileAlreadyExists(at: Foundation.URL)
+    case outputStreamURLInvalid(url: Foundation.URL)
+    case outputStreamWriteFailed(error: any Swift.Error)
+    case inputStreamReadFailed(error: any Swift.Error)
+  }
+  public enum ResponseValidationFailureReason {
+    case dataFileNil
+    case dataFileReadFailed(at: Foundation.URL)
+    case missingContentType(acceptableContentTypes: [Swift.String])
+    case unacceptableContentType(acceptableContentTypes: [Swift.String], responseContentType: Swift.String)
+    case unacceptableStatusCode(code: Swift.Int)
+  }
+  public enum ResponseSerializationFailureReason {
+    case inputDataNil
+    case inputDataNilOrZeroLength
+    case inputFileNil
+    case inputFileReadFailed(at: Foundation.URL)
+    case stringSerializationFailed(encoding: Swift.String.Encoding)
+    case jsonSerializationFailed(error: any Swift.Error)
+    case propertyListSerializationFailed(error: any Swift.Error)
+  }
+  case invalidURL(url: any WhaleCloud.URLConvertible)
+  case parameterEncodingFailed(reason: WhaleCloud.AFError.ParameterEncodingFailureReason)
+  case multipartEncodingFailed(reason: WhaleCloud.AFError.MultipartEncodingFailureReason)
+  case responseValidationFailed(reason: WhaleCloud.AFError.ResponseValidationFailureReason)
+  case responseSerializationFailed(reason: WhaleCloud.AFError.ResponseSerializationFailureReason)
+}
+extension WhaleCloud.AFError {
+  public var isInvalidURLError: Swift.Bool {
+    get
+  }
+  public var isParameterEncodingError: Swift.Bool {
+    get
+  }
+  public var isMultipartEncodingError: Swift.Bool {
+    get
+  }
+  public var isResponseValidationError: Swift.Bool {
+    get
+  }
+  public var isResponseSerializationError: Swift.Bool {
+    get
+  }
+}
+extension WhaleCloud.AFError {
+  public var urlConvertible: (any WhaleCloud.URLConvertible)? {
+    get
+  }
+  public var url: Foundation.URL? {
+    get
+  }
+  public var underlyingError: (any Swift.Error)? {
+    get
+  }
+  public var acceptableContentTypes: [Swift.String]? {
+    get
+  }
+  public var responseContentType: Swift.String? {
+    get
+  }
+  public var responseCode: Swift.Int? {
+    get
+  }
+  public var failedStringEncoding: Swift.String.Encoding? {
+    get
+  }
+}
+extension WhaleCloud.AFError : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers open class SessionDelegate : ObjectiveC.NSObject {
+  open var sessionDidBecomeInvalidWithError: ((Foundation.URLSession, (any Swift.Error)?) -> Swift.Void)?
+  open var sessionDidReceiveChallenge: ((Foundation.URLSession, Foundation.URLAuthenticationChallenge) -> (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?))?
+  open var sessionDidReceiveChallengeWithCompletion: ((Foundation.URLSession, Foundation.URLAuthenticationChallenge, @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void) -> Swift.Void)?
+  open var sessionDidFinishEventsForBackgroundURLSession: ((Foundation.URLSession) -> Swift.Void)?
+  open var taskWillPerformHTTPRedirection: ((Foundation.URLSession, Foundation.URLSessionTask, Foundation.HTTPURLResponse, Foundation.URLRequest) -> Foundation.URLRequest?)?
+  open var taskWillPerformHTTPRedirectionWithCompletion: ((Foundation.URLSession, Foundation.URLSessionTask, Foundation.HTTPURLResponse, Foundation.URLRequest, @escaping (Foundation.URLRequest?) -> Swift.Void) -> Swift.Void)?
+  open var taskDidReceiveChallenge: ((Foundation.URLSession, Foundation.URLSessionTask, Foundation.URLAuthenticationChallenge) -> (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?))?
+  open var taskDidReceiveChallengeWithCompletion: ((Foundation.URLSession, Foundation.URLSessionTask, Foundation.URLAuthenticationChallenge, @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void) -> Swift.Void)?
+  open var taskNeedNewBodyStream: ((Foundation.URLSession, Foundation.URLSessionTask) -> Foundation.InputStream?)?
+  open var taskNeedNewBodyStreamWithCompletion: ((Foundation.URLSession, Foundation.URLSessionTask, @escaping (Foundation.InputStream?) -> Swift.Void) -> Swift.Void)?
+  open var taskDidSendBodyData: ((Foundation.URLSession, Foundation.URLSessionTask, Swift.Int64, Swift.Int64, Swift.Int64) -> Swift.Void)?
+  open var taskDidComplete: ((Foundation.URLSession, Foundation.URLSessionTask, (any Swift.Error)?) -> Swift.Void)?
+  open var dataTaskDidReceiveResponse: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLResponse) -> Foundation.URLSession.ResponseDisposition)?
+  open var dataTaskDidReceiveResponseWithCompletion: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLResponse, @escaping (Foundation.URLSession.ResponseDisposition) -> Swift.Void) -> Swift.Void)?
+  open var dataTaskDidBecomeDownloadTask: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLSessionDownloadTask) -> Swift.Void)?
+  open var dataTaskDidReceiveData: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.Data) -> Swift.Void)?
+  open var dataTaskWillCacheResponse: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.CachedURLResponse) -> Foundation.CachedURLResponse?)?
+  open var dataTaskWillCacheResponseWithCompletion: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.CachedURLResponse, @escaping (Foundation.CachedURLResponse?) -> Swift.Void) -> Swift.Void)?
+  open var downloadTaskDidFinishDownloadingToURL: ((Foundation.URLSession, Foundation.URLSessionDownloadTask, Foundation.URL) -> Swift.Void)?
+  open var downloadTaskDidWriteData: ((Foundation.URLSession, Foundation.URLSessionDownloadTask, Swift.Int64, Swift.Int64, Swift.Int64) -> Swift.Void)?
+  open var downloadTaskDidResumeAtOffset: ((Foundation.URLSession, Foundation.URLSessionDownloadTask, Swift.Int64, Swift.Int64) -> Swift.Void)?
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  open var streamTaskReadClosed: ((Foundation.URLSession, Foundation.URLSessionStreamTask) -> Swift.Void)? {
+    get
+    set
+  }
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  open var streamTaskWriteClosed: ((Foundation.URLSession, Foundation.URLSessionStreamTask) -> Swift.Void)? {
+    get
+    set
+  }
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  open var streamTaskBetterRouteDiscovered: ((Foundation.URLSession, Foundation.URLSessionStreamTask) -> Swift.Void)? {
+    get
+    set
+  }
+  @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+  open var streamTaskDidBecomeInputAndOutputStreams: ((Foundation.URLSession, Foundation.URLSessionStreamTask, Foundation.InputStream, Foundation.OutputStream) -> Swift.Void)? {
+    get
+    set
+  }
+  open subscript(task: Foundation.URLSessionTask) -> WhaleCloud.Request? {
+    get
+    set
+  }
+  @objc override dynamic public init()
+  @objc override dynamic open func responds(to selector: ObjectiveC.Selector) -> Swift.Bool
+  @objc deinit
+}
+extension WhaleCloud.SessionDelegate : Foundation.URLSessionDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, didBecomeInvalidWithError error: (any Swift.Error)?)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, didReceive challenge: Foundation.URLAuthenticationChallenge, completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void)
+  @objc dynamic open func urlSessionDidFinishEvents(forBackgroundURLSession session: Foundation.URLSession)
+}
+extension WhaleCloud.SessionDelegate : Foundation.URLSessionTaskDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, willPerformHTTPRedirection response: Foundation.HTTPURLResponse, newRequest request: Foundation.URLRequest, completionHandler: @escaping (Foundation.URLRequest?) -> Swift.Void)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didReceive challenge: Foundation.URLAuthenticationChallenge, completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, needNewBodyStream completionHandler: @escaping (Foundation.InputStream?) -> Swift.Void)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didSendBodyData bytesSent: Swift.Int64, totalBytesSent: Swift.Int64, totalBytesExpectedToSend: Swift.Int64)
+  @available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+  @objc(URLSession:task:didFinishCollectingMetrics:) dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didFinishCollecting metrics: Foundation.URLSessionTaskMetrics)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: (any Swift.Error)?)
+}
+extension WhaleCloud.SessionDelegate : Foundation.URLSessionDataDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive response: Foundation.URLResponse, completionHandler: @escaping (Foundation.URLSession.ResponseDisposition) -> Swift.Void)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didBecome downloadTask: Foundation.URLSessionDownloadTask)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive data: Foundation.Data)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, willCacheResponse proposedResponse: Foundation.CachedURLResponse, completionHandler: @escaping (Foundation.CachedURLResponse?) -> Swift.Void)
+}
+extension WhaleCloud.SessionDelegate : Foundation.URLSessionDownloadDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didFinishDownloadingTo location: Foundation.URL)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didWriteData bytesWritten: Swift.Int64, totalBytesWritten: Swift.Int64, totalBytesExpectedToWrite: Swift.Int64)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, downloadTask: Foundation.URLSessionDownloadTask, didResumeAtOffset fileOffset: Swift.Int64, expectedTotalBytes: Swift.Int64)
+}
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+extension WhaleCloud.SessionDelegate : Foundation.URLSessionStreamDelegate {
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, readClosedFor streamTask: Foundation.URLSessionStreamTask)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, writeClosedFor streamTask: Foundation.URLSessionStreamTask)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, betterRouteDiscoveredFor streamTask: Foundation.URLSessionStreamTask)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, streamTask: Foundation.URLSessionStreamTask, didBecome inputStream: Foundation.InputStream, outputStream: Foundation.OutputStream)
+}
+@_inheritsConvenienceInitializers @objc public class WcFeedBackEvent : ObjectiveC.NSObject {
+  @objc public static let EVENT_TOUCH_POINTER: Swift.UInt8
+  @objc public static let EVENT_KEYBOARD_BUTTON: Swift.UInt8
+  @objc public static let EVENT_GAMEPAD: Swift.UInt8
+  @objc public static let EVENT_MOUSE_ABSOLUTE: Swift.UInt8
+  @objc public static let EVENT_GAMEPAD_RUMBLE: Swift.UInt8
+  @objc public static let EVENT_MOUSE_RELATIVE: Swift.UInt8
+  @objc public static let EVENT_CURSOR_UPDATE: Swift.UInt8
+  @objc public static let EVENT_POSITION_UPDATE: Swift.UInt8
+  @objc public static let EVENT_INPUT: Swift.UInt8
+  @objc public static let EVENT_FILE_COPY: Swift.UInt8
+  @objc public static let EVENT_CODEC_FEEDBACK: Swift.UInt8
+  @objc public static let EVENT_OPEN_URL: Swift.UInt8
+  @objc public static let EVENT_UDISK: Swift.UInt8
+  @objc public static let EVENT_WIN_POPUP: Swift.UInt8
+  @objc public var msgType: Swift.UInt8
+  @objc public var mimeType: Swift.UInt8
+  @objc public var x_offset: Swift.UInt8
+  @objc public var y_offset: Swift.UInt8
+  @objc public var data: Foundation.Data
+  @objc public var position_x: Swift.Int
+  @objc public var position_y: Swift.Int
+  @objc public var gamepadEvent: WhaleCloud.GamePadRumbleEvent
+  @objc public var url: Swift.String
+  @objc public var winName: Swift.String
+  @objc public var winPath: Swift.String
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class GamePadRumbleEvent : ObjectiveC.NSObject {
+  public var index: Swift.Int
+  public var duration: Swift.UInt16
+  public var startDelay: Swift.UInt16
+  public var wLeftMotor: Swift.UInt16
+  public var wRightMotor: Swift.UInt16
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol DataResponseSerializerProtocol {
+  associatedtype SerializedObject
+  var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, (any Swift.Error)?) -> WhaleCloud.Result<Self.SerializedObject> { get }
+}
+public struct DataResponseSerializer<Value> : WhaleCloud.DataResponseSerializerProtocol {
+  public typealias SerializedObject = Value
+  public var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, (any Swift.Error)?) -> WhaleCloud.Result<Value>
+  public init(serializeResponse: @escaping (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, (any Swift.Error)?) -> WhaleCloud.Result<Value>)
+}
+public protocol DownloadResponseSerializerProtocol {
+  associatedtype SerializedObject
+  var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, (any Swift.Error)?) -> WhaleCloud.Result<Self.SerializedObject> { get }
+}
+public struct DownloadResponseSerializer<Value> : WhaleCloud.DownloadResponseSerializerProtocol {
+  public typealias SerializedObject = Value
+  public var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, (any Swift.Error)?) -> WhaleCloud.Result<Value>
+  public init(serializeResponse: @escaping (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, (any Swift.Error)?) -> WhaleCloud.Result<Value>)
+}
+extension WhaleCloud.DataRequest {
+  @discardableResult
+  public func response(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (WhaleCloud.DefaultDataResponse) -> Swift.Void) -> Self
+  @discardableResult
+  public func response<T>(queue: Dispatch.DispatchQueue? = nil, responseSerializer: T, completionHandler: @escaping (WhaleCloud.DataResponse<T.SerializedObject>) -> Swift.Void) -> Self where T : WhaleCloud.DataResponseSerializerProtocol
+}
+extension WhaleCloud.DownloadRequest {
+  @discardableResult
+  public func response(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (WhaleCloud.DefaultDownloadResponse) -> Swift.Void) -> Self
+  @discardableResult
+  public func response<T>(queue: Dispatch.DispatchQueue? = nil, responseSerializer: T, completionHandler: @escaping (WhaleCloud.DownloadResponse<T.SerializedObject>) -> Swift.Void) -> Self where T : WhaleCloud.DownloadResponseSerializerProtocol
+}
+extension WhaleCloud.Request {
+  public static func serializeResponseData(response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?) -> WhaleCloud.Result<Foundation.Data>
+}
+extension WhaleCloud.DataRequest {
+  public static func dataResponseSerializer() -> WhaleCloud.DataResponseSerializer<Foundation.Data>
+  @discardableResult
+  public func responseData(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (WhaleCloud.DataResponse<Foundation.Data>) -> Swift.Void) -> Self
+}
+extension WhaleCloud.DownloadRequest {
+  public static func dataResponseSerializer() -> WhaleCloud.DownloadResponseSerializer<Foundation.Data>
+  @discardableResult
+  public func responseData(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (WhaleCloud.DownloadResponse<Foundation.Data>) -> Swift.Void) -> Self
+}
+extension WhaleCloud.Request {
+  public static func serializeResponseString(encoding: Swift.String.Encoding?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?) -> WhaleCloud.Result<Swift.String>
+}
+extension WhaleCloud.DataRequest {
+  public static func stringResponseSerializer(encoding: Swift.String.Encoding? = nil) -> WhaleCloud.DataResponseSerializer<Swift.String>
+  @discardableResult
+  public func responseString(queue: Dispatch.DispatchQueue? = nil, encoding: Swift.String.Encoding? = nil, completionHandler: @escaping (WhaleCloud.DataResponse<Swift.String>) -> Swift.Void) -> Self
+}
+extension WhaleCloud.DownloadRequest {
+  public static func stringResponseSerializer(encoding: Swift.String.Encoding? = nil) -> WhaleCloud.DownloadResponseSerializer<Swift.String>
+  @discardableResult
+  public func responseString(queue: Dispatch.DispatchQueue? = nil, encoding: Swift.String.Encoding? = nil, completionHandler: @escaping (WhaleCloud.DownloadResponse<Swift.String>) -> Swift.Void) -> Self
+}
+extension WhaleCloud.Request {
+  public static func serializeResponseJSON(options: Foundation.JSONSerialization.ReadingOptions, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?) -> WhaleCloud.Result<Any>
+}
+extension WhaleCloud.DataRequest {
+  public static func jsonResponseSerializer(options: Foundation.JSONSerialization.ReadingOptions = .allowFragments) -> WhaleCloud.DataResponseSerializer<Any>
+  @discardableResult
+  public func responseJSON(queue: Dispatch.DispatchQueue? = nil, options: Foundation.JSONSerialization.ReadingOptions = .allowFragments, completionHandler: @escaping (WhaleCloud.DataResponse<Any>) -> Swift.Void) -> Self
+}
+extension WhaleCloud.DownloadRequest {
+  public static func jsonResponseSerializer(options: Foundation.JSONSerialization.ReadingOptions = .allowFragments) -> WhaleCloud.DownloadResponseSerializer<Any>
+  @discardableResult
+  public func responseJSON(queue: Dispatch.DispatchQueue? = nil, options: Foundation.JSONSerialization.ReadingOptions = .allowFragments, completionHandler: @escaping (WhaleCloud.DownloadResponse<Any>) -> Swift.Void) -> Self
+}
+extension WhaleCloud.Request {
+  public static func serializeResponsePropertyList(options: Foundation.PropertyListSerialization.ReadOptions, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?) -> WhaleCloud.Result<Any>
+}
+extension WhaleCloud.DataRequest {
+  public static func propertyListResponseSerializer(options: Foundation.PropertyListSerialization.ReadOptions = []) -> WhaleCloud.DataResponseSerializer<Any>
+  @discardableResult
+  public func responsePropertyList(queue: Dispatch.DispatchQueue? = nil, options: Foundation.PropertyListSerialization.ReadOptions = [], completionHandler: @escaping (WhaleCloud.DataResponse<Any>) -> Swift.Void) -> Self
+}
+extension WhaleCloud.DownloadRequest {
+  public static func propertyListResponseSerializer(options: Foundation.PropertyListSerialization.ReadOptions = []) -> WhaleCloud.DownloadResponseSerializer<Any>
+  @discardableResult
+  public func responsePropertyList(queue: Dispatch.DispatchQueue? = nil, options: Foundation.PropertyListSerialization.ReadOptions = [], completionHandler: @escaping (WhaleCloud.DownloadResponse<Any>) -> Swift.Void) -> Self
+}
+@objc @_hasMissingDesignatedInitializers open class TaskDelegate : ObjectiveC.NSObject {
+  final public let queue: Foundation.OperationQueue
+  public var data: Foundation.Data? {
+    get
+  }
+  public var error: (any Swift.Error)?
+  @objc deinit
+}
+@objc public class tController : ObjectiveC.NSObject {
+  @objc public var LX: Swift.Int16
+  @objc public var LY: Swift.Int16
+  @objc public var RX: Swift.Int16
+  @objc public var RY: Swift.Int16
+  @objc public var player: Swift.UInt8
+  @objc public var wButtons: Swift.UInt16
+  @objc public var bLeftTrigger: Swift.UInt8
+  @objc public var bRightTrigger: Swift.UInt8
+  @objc public init(playerNo: Swift.UInt8)
+  @objc public func setKey(keyCode: Swift.UInt16, down: Swift.Bool)
+  @objc deinit
+}
+extension WhaleCloud.HTTPMethod : Swift.Equatable {}
+extension WhaleCloud.HTTPMethod : Swift.Hashable {}
+extension WhaleCloud.HTTPMethod : Swift.RawRepresentable {}
+extension WhaleCloud.URLEncoding.Destination : Swift.Equatable {}
+extension WhaleCloud.URLEncoding.Destination : Swift.Hashable {}
+extension WhaleCloud.URLEncoding.ArrayEncoding : Swift.Equatable {}
+extension WhaleCloud.URLEncoding.ArrayEncoding : Swift.Hashable {}
+extension WhaleCloud.URLEncoding.BoolEncoding : Swift.Equatable {}
+extension WhaleCloud.URLEncoding.BoolEncoding : Swift.Hashable {}
+extension WhaleCloud.TextEncodeType : Swift.Equatable {}
+extension WhaleCloud.TextEncodeType : Swift.Hashable {}
+extension WhaleCloud.TextEncodeType : Swift.RawRepresentable {}
+extension WhaleCloud.SwiftyJSONError : Swift.Equatable {}
+extension WhaleCloud.SwiftyJSONError : Swift.Hashable {}
+extension WhaleCloud.SwiftyJSONError : Swift.RawRepresentable {}
+extension WhaleCloud.`Type` : Swift.Equatable {}
+extension WhaleCloud.`Type` : Swift.Hashable {}
+extension WhaleCloud.`Type` : Swift.RawRepresentable {}
+extension WhaleCloud.writingOptionsKeys : Swift.Equatable {}
+extension WhaleCloud.writingOptionsKeys : Swift.Hashable {}
+extension WhaleCloud.TouchEvent.Action : Swift.Equatable {}
+extension WhaleCloud.TouchEvent.Action : Swift.Hashable {}
+extension WhaleCloud.TouchEvent.Action : Swift.RawRepresentable {}
+extension WhaleCloud.NetworkReachabilityManager.ConnectionType : Swift.Equatable {}
+extension WhaleCloud.NetworkReachabilityManager.ConnectionType : Swift.Hashable {}
+extension WhaleCloud.CloseCode : Swift.Equatable {}
+extension WhaleCloud.CloseCode : Swift.Hashable {}
+extension WhaleCloud.CloseCode : Swift.RawRepresentable {}
+extension WhaleCloud.ErrorType : Swift.Equatable {}
+extension WhaleCloud.ErrorType : Swift.Hashable {}
+extension WhaleCloud.WebSocket.OpCode : Swift.Equatable {}
+extension WhaleCloud.WebSocket.OpCode : Swift.Hashable {}
+extension WhaleCloud.WebSocket.OpCode : Swift.RawRepresentable {}
+extension WhaleCloud.GamePad.GamePadBtnKey : Swift.Equatable {}
+extension WhaleCloud.GamePad.GamePadBtnKey : Swift.Hashable {}
+extension WhaleCloud.GamePad.GamePadBtnKey : Swift.RawRepresentable {}
+extension WhaleCloud.JyCode : Swift.Equatable {}
+extension WhaleCloud.JyCode : Swift.Hashable {}
+extension WhaleCloud.JyCode : Swift.RawRepresentable {}
+extension WhaleCloud.WcLogUtil.Severity : Swift.Equatable {}
+extension WhaleCloud.WcLogUtil.Severity : Swift.Hashable {}
+extension WhaleCloud.WcLogUtil.Severity : Swift.RawRepresentable {}
